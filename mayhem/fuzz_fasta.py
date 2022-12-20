@@ -14,11 +14,16 @@ def TestOneInput(data):
     fdp = fuzz_helpers.EnhancedFuzzedDataProvider(data)
     try:
         with fdp.ConsumeTemporaryFile('.fasta', all_data=True, as_bytes=True) as fasta_file_path:
-            pyfaidx.Fasta(fasta_file_path)
+            with pyfaidx.Fasta(fasta_file_path) as fasta:
+                print(fasta)
     except fasta_error_tup:
         return -1
     except UnicodeDecodeError:
         return -1
+    except ValueError as e:
+        if 'Duplicate key' in str(e):
+            return -1
+        raise e
 
 
 def main():
