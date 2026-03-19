@@ -169,8 +169,15 @@ class Sequence(object):
                 start = self_end - slice_stop
                 end = self_start + slice_stop
             else:
-                start = self_start + slice_start
-                end = self_start + slice_stop + correction_factor
+                # Adjust coordinates based on the original orientation.
+                # If start > end, the sequence is in reverse orientation and
+                # coordinate math must decrement.
+                if self_start is not None and self_end is not None and self_start > self_end:
+                    start = self_start - slice_start
+                    end = self_start - slice_stop - correction_factor
+                else:
+                    start = self_start + slice_start
+                    end = self_start + slice_stop + correction_factor
             return self.__class__(self.name, self.seq[n], start, end,
                                   self.comp)
         elif isinstance(n, int):
