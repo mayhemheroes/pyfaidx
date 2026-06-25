@@ -1,0 +1,10 @@
+project: pyfaidx
+target: fasta-fuzz
+
+testsuite:
+  - file:///mayhem/mayhem/testsuite
+
+cmds:
+  - cmd: /mayhem/parse-fasta
+    libfuzzer: true
+    timeout: 15
